@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="SFCalculatorType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+   <Parameters>
+      <Parameter Name="CalculatorHistoryService_MinReplicaSetSize" DefaultValue="2" />
+      <Parameter Name="CalculatorHistoryService_PartitionCount" DefaultValue="6" />
+      <Parameter Name="CalculatorHistoryService_TargetReplicaSetSize" DefaultValue="3" />
+      <Parameter Name="CalculatorWebService_InstanceCount" DefaultValue="-1" />
+   </Parameters>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="CalculatorHistoryServicePkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="CalculatorWebServicePkg" ServiceManifestVersion="1.0.0" />
+      <ConfigOverrides />
+   </ServiceManifestImport>
+   <DefaultServices>
+      <Service Name="CalculatorHistoryService">
+         <StatefulService ServiceTypeName="CalculatorHistoryServiceType" TargetReplicaSetSize="[CalculatorHistoryService_TargetReplicaSetSize]" MinReplicaSetSize="[CalculatorHistoryService_MinReplicaSetSize]">
+            <UniformInt64Partition PartitionCount="[CalculatorHistoryService_PartitionCount]" LowKey="0" HighKey="10" />
+         </StatefulService>
+      </Service>
+      <Service Name="CalculatorWebService">
+         <StatelessService ServiceTypeName="CalculatorWebServiceType" InstanceCount="[CalculatorWebService_InstanceCount]">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
+   </DefaultServices>
+</ApplicationManifest>

@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "SFCalculator", "SFCalculator\SFCalculator.sfproj", "{22762939-56B7-4B66-B692-9E728F218E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWebService", "CalculatorWebService\CalculatorWebService.csproj", "{54464795-6684-4730-A576-712CE3784A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorHistoryService", "CalculatorHistory\CalculatorHistoryService.csproj", "{3B64DC46-03FF-47EB-92BF-5136A279D33F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22762939-56B7-4B66-B692-9E728F218E41}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Debug|x64.ActiveCfg = Debug|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Debug|x64.Build.0 = Debug|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Debug|x64.Deploy.0 = Debug|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Release|Any CPU.ActiveCfg = Release|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Release|x64.ActiveCfg = Release|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Release|x64.Build.0 = Release|x64
+		{22762939-56B7-4B66-B692-9E728F218E41}.Release|x64.Deploy.0 = Release|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Debug|x64.ActiveCfg = Debug|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Debug|x64.Build.0 = Debug|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Release|Any CPU.ActiveCfg = Release|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Release|x64.ActiveCfg = Release|x64
+		{54464795-6684-4730-A576-712CE3784A7A}.Release|x64.Build.0 = Release|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Debug|x64.ActiveCfg = Debug|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Debug|x64.Build.0 = Debug|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Release|Any CPU.ActiveCfg = Release|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Release|x64.ActiveCfg = Release|x64
+		{3B64DC46-03FF-47EB-92BF-5136A279D33F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
