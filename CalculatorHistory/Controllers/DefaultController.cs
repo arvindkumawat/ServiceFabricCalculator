@@ -2,9 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.ServiceFabric.Data.Collections;
     using System.Web.Http;
     using Microsoft.ServiceFabric.Data;
-    using Microsoft.ServiceFabric.Data.Collections;
 
     [RoutePrefix("api")]
     public class DefaultController : ApiController

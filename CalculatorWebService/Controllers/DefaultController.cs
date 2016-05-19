@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Fabric;
     using System.Net;
     using System.Net.Http;
@@ -9,61 +10,48 @@
     using System.Threading.Tasks;
     using System.Web.Http;
 
+    using global::CalculatorWebService.ActivityEngine;
+
     using Microsoft.ServiceFabric.Services.Client;
     using Microsoft.ServiceFabric.Services.Communication.Client;
 
-    [RoutePrefix("api")]
     public class DefaultController : ApiController
     {
-        private const string CalculatorHistoryServiceName = "fabric:/SFCalculator/CalculatorHistoryService";
-        private const int MaxQueryRetryCount = 20;
-        private static TimeSpan BackoffQueryDelay = TimeSpan.FromSeconds(3);
-        private static FabricClient fabricClient = new FabricClient();
+        [Route("activities"), HttpPost]
+        public async Task<HttpResponseMessage> PostActivityRun()
+        {
+            ActivityExecutionResult result = new ActivityExecutionResult();
+            result.Status = ExecutionStatus.Running;
 
-        private static CommunicationClientFactory clientFactory = new CommunicationClientFactory(
-            ServicePartitionResolver.GetDefault(),
-            TimeSpan.FromSeconds(10),
-            TimeSpan.FromSeconds(3));
+            await Task.Delay(0).ConfigureAwait(false);
+            return this.Request.CreateResponse(HttpStatusCode.Accepted);
+        }
+
+        [Route("activities/{id}"), HttpGet]
+        public async Task<HttpResponseMessage> GetActivityStatus(string id)
+        {
+            ActivityExecutionResult result = new ActivityExecutionResult()
+                {
+                    Id = id,
+                    Status = ExecutionStatus.Completed
+                };
+
+            await Task.Delay(0).ConfigureAwait(false);
+            return this.Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+
+        [Route("activities/{id}"), HttpDelete]
+        public async Task<HttpResponseMessage> DeleteActivity(string id)
+        {
+            await Task.Delay(0).ConfigureAwait(false);
+            return this.Request.CreateResponse(HttpStatusCode.Accepted);
+        }
 
         [Route("add/{a}/{b}")]
-        public async Task<HttpResponseMessage> GetAdd(int a, int b)
+        public string GetAdd(int a, int b)
         {
-            int result = a + b;
-            string str = $"{a} + {b} = {result}";
-
-            // Determine the partition key that should handle the request
-            long partitionKey = 1;
-
-            // Use service partition client to resolve the service and partition key.
-            // This determines the endpoint of the replica that should handle the request.
-            // Internally, the service partition client handles exceptions and retries appropriately.
-            ServicePartitionClient<CommunicationClient> servicePartitionClient = new ServicePartitionClient<CommunicationClient>(
-                clientFactory,
-                new Uri(CalculatorHistoryServiceName),
-                partitionKey);
-
-            return await servicePartitionClient.InvokeWithRetryAsync(
-                client =>
-                {
-                    Uri serviceAddress = new Uri(client.BaseAddress, string.Format("api/add/{0}", str));
-
-                    HttpWebRequest request = WebRequest.CreateHttp(serviceAddress);
-                    request.Method = "PUT";
-                    request.ContentLength = 0;
-                    request.Timeout = (int)client.OperationTimeout.TotalMilliseconds;
-                    request.ReadWriteTimeout = (int)client.ReadWriteTimeout.TotalMilliseconds;
-
-                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                    {
-                        HttpResponseMessage message = new HttpResponseMessage();
-                        message.Content = new StringContent(
-                            String.Format("<h1>{0}</h1> added to partition <h2>{1}</h2> at {2}", str, client.ResolvedServicePartition.Info.Id, serviceAddress),
-                            Encoding.UTF8,
-                            "text/html");
-
-                        return Task.FromResult<HttpResponseMessage>(message);
-                    }
-                });
+            return (a + b).ToString();
         }
 
         [Route("sub/{a}/{b}")]
@@ -103,6 +91,16 @@
         {
         }
 
+        // POST api/values
+        [Route("values1")]
+        public void Post([FromBody]IList<string> values)
+        {
+            foreach (var value in values)
+            {
+                Trace.TraceInformation(value);
+            }
+        }
+
         // PUT api/values/5
         [Route("values/{id}")]
         public void Put(int id, [FromBody]string value)
@@ -112,6 +110,12 @@
         // DELETE api/values/5
         [Route("values/{id}")]
         public void Delete(int id)
+        {
+        }
+
+        // DELETE api/values/5
+        [Route("values1/{id}")]
+        public void Delete(int id, [FromBody] string body)
         {
         }
     }

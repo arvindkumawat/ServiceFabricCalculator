@@ -1,10 +1,17 @@
-﻿using System;
-using System.Diagnostics;
-using System.Fabric;
-using System.Threading;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Program.cs" company="Microsoft Corporation">
+//   Copyright (c) Microsoft Corporation. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 namespace CalculatorWebService
 {
+    using System;
+    using System.Diagnostics;
+    using System.Threading;
+
+    using Microsoft.ServiceFabric.Services.Runtime;
+
+    /// <summary>The program.</summary>
     internal static class Program
     {
         /// <summary>
@@ -14,19 +21,10 @@ namespace CalculatorWebService
         {
             try
             {
-                // Creating a FabricRuntime connects this host process to the Service Fabric runtime.
-                using (FabricRuntime fabricRuntime = FabricRuntime.Create())
-                {
-                    // The ServiceManifest.XML file defines one or more service type names.
-                    // RegisterServiceType maps a service type name to a .NET class.
-                    // When Service Fabric creates an instance of this service type,
-                    // an instance of the class is created in this host process.
-                    fabricRuntime.RegisterServiceType("CalculatorWebServiceType", typeof(CalculatorWebService));
+                ServiceRuntime.RegisterServiceAsync("CalculatorWebServiceType", context => new CalculatorWebService(context)).GetAwaiter().GetResult();
+                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(CalculatorWebService).Name);
 
-                    ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(CalculatorWebService).Name);
-
-                    Thread.Sleep(Timeout.Infinite);  // Prevents this host process from terminating so services keeps running.
-                }
+                Thread.Sleep(Timeout.Infinite); // Prevents this host process from terminating so services keeps running.
             }
             catch (Exception e)
             {
